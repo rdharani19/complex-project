@@ -1,0 +1,23 @@
+language: generic
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t rdharani19/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true rdharani19/react-test npm test
+
+after_success:
+  - docker build -t rdharani19/complex-client ./client
+  - docker build -t rdharani19/complex-nginx ./nginx
+  - docker build -t rdharani19/complex-server ./server
+  - docker build -t rdharani19/complex-worker ./worker
+  # login into docker_hub
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # to push to dockerhub
+  - docker push rdharani19/complex-client
+  - docker push rdharani19/complex-nginx
+  - docker push rdharani19/complex-server
+  - docker push rdharani19/complex-worker
