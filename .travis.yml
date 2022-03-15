@@ -21,3 +21,9 @@ after_success:
   - docker push rdharani19/complex-nginx
   - docker push rdharani19/complex-server
   - docker push rdharani19/complex-worker
+
+deploy:
+  provider: elasticbeanstalk
+  region: us-east-1
+  app: multi-docker
+  env: Multidocker-env
